@@ -32,6 +32,10 @@ jobs:
 
     - name: Update JavaScript File
       run: |
+        export urlFilter=$(grep -E -v '^title/' rules/all_rules.txt)
+        export keywordsFilter=$(grep -E '^title/' rules/all_rules.txt)
+        sed -i "s#const keywordsFilter =.*#const keywordsFilter = /$regex_rules_keywords/;#" filter.user.js.tmp
+        # Extracting urlFilter and keywordsFilter from rules
         export urlFilter=$(awk '!/^title\// {printf "%s|", $0}' rules/all_rules.txt | sed 's/.$//')
         export keywordsFilter=$(awk '/^title\// {printf "%s|", $0}' rules/all_rules.txt | sed 's/.$//')
         sed -i "s#const urlFilter =.*#const urlFilter = /$urlFilter/;#" filter.user.js.tmp
