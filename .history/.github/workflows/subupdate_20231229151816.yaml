@@ -36,13 +36,13 @@ jobs:
         keywordsFilter=()
         urlFilter=()
         while IFS= read -r line; do
-        if [[ $line =~ ^title/.* ]]; then  
-          line="\\b${line:6}\\b/i"
-          keywordsFilter+=(\"$line\")
-        elif [[ $line =~ ^\\*://.* ]]; then
-          line="\\^${line:3}\\\\$/i" 
-          urlFilter+=(\"$line\")
-        fi
+  if [[ $line =~ ^title/.* ]]; then  
+    line="\\b${line:6}\\b/i"
+    keywordsFilter+=(\"$line\")
+  elif [[ $line =~ ^\\*://.* ]]; then
+    line="\\^${line:3}\\\\$/i" 
+    urlFilter+=(\"$line\")
+  fi
         done < "$rules_file"
         keywordsFilter_regex=$(printf "|%s" "${keywordsFilter[@]}")
         keywordsFilter_regex=${keywordsFilter_regex:1}
