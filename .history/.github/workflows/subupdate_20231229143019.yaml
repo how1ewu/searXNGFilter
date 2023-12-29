@@ -38,7 +38,7 @@ jobs:
         grep 'title/' rules/all_rules.txt | sed 's#title/##' | sed 's#/#\\/#g' >> filter.user.js.tmp
         echo -n '\/i;' >> filter.user.js.tmp
         echo -n 'const urlFilter = /' >> filter.user.js.tmp
-        grep 'url/' rules/all_rules.txt | sed 's#url/##' | sed 's#/#\\/#g' >> filter.user.js.tmp
+        grep 'url/' rules/all_rules.txt | sed 's#url/##' | sed 's#/#\\/#g' >> path/to/your/script.js
         echo -n '/i;' >> filter.user.js.tmp
 
     - name: Add changes to the repository

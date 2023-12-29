@@ -32,13 +32,13 @@ jobs:
 
     - name: Update JavaScript File
       run: |
-        sed -i '/const keywordsFilter = /c\const keywordsFilter = /' filter.user.js.tmp
+        sed -i '/const keywordsFilter = /c\const keywordsFilter = /' filter.user.js.tmp.tmp
         sed -i '/const urlFilter = /c\const urlFilter = /' filter.user.js.tmp
         echo -n '\/' >> filter.user.js.tmp
         grep 'title/' rules/all_rules.txt | sed 's#title/##' | sed 's#/#\\/#g' >> filter.user.js.tmp
         echo -n '\/i;' >> filter.user.js.tmp
         echo -n 'const urlFilter = /' >> filter.user.js.tmp
-        grep 'url/' rules/all_rules.txt | sed 's#url/##' | sed 's#/#\\/#g' >> filter.user.js.tmp
+        grep -v 'title/' rules/all_rules.txt | sed 's#/#\\/#g' >> filter.user.js.tmp
         echo -n '/i;' >> filter.user.js.tmp
 
     - name: Add changes to the repository
