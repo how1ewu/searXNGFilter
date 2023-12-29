@@ -8,7 +8,7 @@ on:
     - cron: "0 0 */3 * *"
   
 jobs:
-  process-update:
+  process-ips:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -34,6 +34,8 @@ jobs:
       run: |
         awk '!/^title\// {printf "%s|", $0}' rules/all_rules.txt | sed 's/.$//' > /tmp/urlFilter.txt
         awk '/^title\// {printf "%s|", $0}' rules/all_rules.txt | sed 's/.$//' > /tmp/keywordsFilter.txt
+
+    # Injecting filters into the script using the temporary files
         sed -i "s#const urlFilter =.*#const urlFilter = /$(cat /tmp/urlFilter.txt)/;#" filter-script.js
         sed -i "s#const keywordsFilter =.*#const keywordsFilter = /$(cat /tmp/keywordsFilter.txt)/;#" filter-script.js
 

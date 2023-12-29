@@ -8,7 +8,7 @@ on:
     - cron: "0 0 */3 * *"
   
 jobs:
-  process-update:
+  process-ips:
     runs-on: ubuntu-latest
     permissions:
       contents: write
