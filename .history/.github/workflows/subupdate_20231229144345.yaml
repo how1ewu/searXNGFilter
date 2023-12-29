@@ -39,6 +39,7 @@ jobs:
         sed -i "s#const urlFilter =.*#const urlFilter = /$regex_rules_url/;#" filter.user.js.tmp
         sed -i "s#const keywordsFilter =.*#const keywordsFilter = /$regex_rules_keywords/;#" filter.user.js.tmp
 
+
     - name: Add changes to the repository
       run: |
         git add .

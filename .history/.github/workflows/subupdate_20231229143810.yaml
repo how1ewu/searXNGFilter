@@ -32,12 +32,16 @@ jobs:
 
     - name: Update JavaScript File
       run: |
-        export urlFilter=$(grep -E -v '^title/' rules/all_rules.txt)
-        export keywordsFilter=$(grep -E '^title/' rules/all_rules.txt)
-        regex_rules_url=$(awk '!/^title\// {printf "%s|", $0}' rules/all_rules.txt | sed 's/.$//')
-        regex_rules_keywords=$(awk '/^title\// {printf "%s|", $0}' rules/all_rules.txt | sed 's/.$//')
-        sed -i "s#const urlFilter =.*#const urlFilter = /$regex_rules_url/;#" filter.user.js.tmp
-        sed -i "s#const keywordsFilter =.*#const keywordsFilter = /$regex_rules_keywords/;#" filter.user.js.tmp
+        # Extracting keywordsFilter and urlFilter from rules
+        export keywordsFilter=$(grep -E 'title/.* - 小.(百科|知识)网/' rules/all_rules.txt)
+        export urlFilter=$(grep -E '\*:\/\/\*\.dafahao\.com\/*' rules/all_rules.txt)
+        sed -i "s#const keywordsFilter =.*#const keywordsFilter = $keywordsFilter;#" filter-script.js
+    sed -i "s#const urlFilter =.*#const urlFilter = $urlFilter;#" filter-script.js
+        grep 'title/' rules/all_rules.txt | sed 's#title/##' | sed 's#/#\\/#g' >> filter.user.js.tmp
+        echo -n '\/i;' >> filter.user.js.tmp
+        echo -n 'const urlFilter = /' >> filter.user.js.tmp
+        grep 'url/' rules/all_rules.txt | sed 's#url/##' | sed 's#/#\\/#g' >> filter.user.js.tmp
+        echo -n '/i;' >> filter.user.js.tmp
 
     - name: Add changes to the repository
       run: |
