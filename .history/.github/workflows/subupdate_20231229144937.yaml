@@ -33,15 +33,17 @@ jobs:
     - name: Update JavaScript File
       run: |
         awk '!/^title\// {print}' rules/all_rules.txt > /tmp/urlFilter.txt
-        awk '/^title\// {print}' rules/all_rules.txt > /tmp/keywordsFilter.txt
-        while IFS= read -r line; do
-          sed -i "s#const urlFilter =.*#const urlFilter = /$line/;#" filter-script.js
-        done < /tmp/urlFilter.txt
+    awk '/^title\// {print}' rules/all_rules.txt > /tmp/keywordsFilter.txt
 
-        while IFS= read -r line; do
-          sed -i "s#const keywordsFilter =.*#const keywordsFilter = /$line/;#" filter-script.js
-        done < /tmp/keywordsFilter.txt
-        
+    # Injecting filters into the script using the temporary files
+    while IFS= read -r line; do
+      sed -i "s#const urlFilter =.*#const urlFilter = /$line/;#" filter-script.js
+    done < /tmp/urlFilter.txt
+
+    while IFS= read -r line; do
+      sed -i "s#const keywordsFilter =.*#const keywordsFilter = /$line/;#" filter-script.js
+    done < /tmp/keywordsFilter.txt
+
     - name: Add changes to the repository
       run: |
         git add .

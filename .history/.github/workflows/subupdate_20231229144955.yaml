@@ -41,7 +41,6 @@ jobs:
         while IFS= read -r line; do
           sed -i "s#const keywordsFilter =.*#const keywordsFilter = /$line/;#" filter-script.js
         done < /tmp/keywordsFilter.txt
-        
     - name: Add changes to the repository
       run: |
         git add .
