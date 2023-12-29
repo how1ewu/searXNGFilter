@@ -51,6 +51,7 @@ jobs:
 
         urlFilter_regex=$(printf "|%s" "${urlFilter[@]}")
         urlFilter_regex=${urlFilter_regex:1}
+
         echo "$keywordsFilter_regex" > keywordsrex.txt
         echo "$urlFilter_regex" > urlrex.txt
 
