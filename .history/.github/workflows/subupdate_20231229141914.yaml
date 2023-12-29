@@ -1,0 +1,52 @@
+name: sub-update
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: "0 0 */3 * *"
+  
+jobs:
+  process-ips:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Git
+      run: |
+        git config --global user.email "actions@github.com"
+        git config --global user.name "GitHub Actions"
+
+    - name: Download and Merge Rules
+      run: |
+        mkdir -p rules
+        curl -o rules/subscription1.txt https://raw.githubusercontent.com/cobaltdisco/Google-Chinese-Results-Blocklist/master/uBlacklist_subscription.txt
+        curl -o rules/subscription2.txt https://raw.githubusercontent.com/Paxxs/Google-Blocklist/develop/uBlacklist_subscription.txt
+        curl -o rules/subscription3.txt https://raw.githubusercontent.com/arosh/ublacklist-stackoverflow-translation/master/uBlacklist.txt
+        cat rules/subscription*.txt | sort -u > rules/all_rules.txt
+
+    - name: Update JavaScript File
+      run: |
+        sed -i '/const keywordsFilter = /c\const keywordsFilter = /' filter.user.js
+        sed -i '/const urlFilter = /c\const urlFilter = /' filter.user.js
+        echo -n '\/' >> filter.user.js
+        grep 'title/' rules/all_rules.txt | sed 's#title/##' | sed 's#/#\\/#g' >> filter.user.js
+        echo -n '\/i;' >> filter.user.js
+        echo -n 'const urlFilter = /' >> filter.user.js
+        grep -v 'title/' rules/all_rules.txt | sed 's#/#\\/#g' >> filter.user.js
+        echo -n '/i;' >> filter.user.js
+
+    - name: Add changes to the repository
+      run: |
+        git add .
+        git status
+
+    - name: Commit and push changes
+      run: |
+        git commit -m "Update IP CIDR list" -a
+        git push
