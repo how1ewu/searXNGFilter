@@ -43,7 +43,7 @@ jobs:
           elif [[ $line =~ ^\*://.* ]]; then
             # 转换为正则表达式
             line="\\^${line:3}\\$" 
-            urlFilter+=(\"$line\")
+    urlFilter+=(\"$line\")
           fi
         done < "$rules_file"
         keywordsFilter_regex=$(printf "|%s" "${keywordsFilter[@]}")
@@ -51,8 +51,8 @@ jobs:
 
         urlFilter_regex=$(printf "|%s" "${urlFilter[@]}")
         urlFilter_regex=${urlFilter_regex:1}
-        echo "$keywordsFilter_regex" > rules/keywordsrex.txt
-        echo "$urlFilter_regex" > rules/urlrex.txt
+        echo "$keywordsFilter_regex" > keywordsrex.txt
+        echo "$urlFilter_regex" > urlrex.txt
 
     - name: Add changes to the repository
       run: |
