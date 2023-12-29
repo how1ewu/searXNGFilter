@@ -42,7 +42,7 @@ jobs:
             keywordsFilter+=("$line")
           elif [[ $line =~ ^\*://.* ]]; then
             # 转换为正则表达式
-            line="\\^${line:3}\\$"
+            line="^${line:3}$"
             urlFilter+=("$line")
           fi
         done < "$rules_file"
